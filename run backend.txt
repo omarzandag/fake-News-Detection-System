@@ -1,0 +1,3 @@
+python -m uvicorn app:app --reload
+
+frontend : npx serve -s
