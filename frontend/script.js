@@ -68,38 +68,57 @@ document.getElementById('predictBtn').addEventListener('click', async () => {
 });
 
 // ===== HISTORY MANAGEMENT (MONGODB) =====
-async function renderHistory() {
+let allHistoryRecords = []; // Store full history for search
+
+async function renderHistory(searchQuery = '') {
   const historyPage = document.getElementById('history-page');
   const container = historyPage.querySelector('.container');
   
-  container.innerHTML = '<div id="history-content"><p>Loading history...</p></div>';
-  const contentDiv = document.getElementById('history-content');
+  // Keep search bar, replace only history list
+  const contentDiv = container.querySelector('#historyRecords') || document.createElement('div');
+  if (!contentDiv.id) contentDiv.id = 'historyRecords';
+  
+  // Show loading
+  contentDiv.innerHTML = '<p>Loading history...</p>';
+  if (!container.querySelector('#historyRecords')) {
+    container.appendChild(contentDiv);
+  }
 
   try {
     const response = await fetch('http://localhost:8000/history');
     if (!response.ok) throw new Error('Failed to load history');
     
-    const records = await response.json();
+    allHistoryRecords = await response.json();
 
-    if (records.length === 0) {
+    // Filter based on search
+    let filteredRecords = allHistoryRecords;
+    if (searchQuery.trim()) {
+      const term = searchQuery.trim().toLowerCase();
+      filteredRecords = allHistoryRecords.filter(item => 
+        item.news.toLowerCase().includes(term)
+      );
+    }
+
+    if (filteredRecords.length === 0) {
       contentDiv.innerHTML = `
         <div class="history-empty">
-          <h2>No History Yet</h2>
-          <p>Analyze a news article to see it appear here.</p>
+          <p>No results found for "${escapeHtml(searchQuery)}"</p>
+          <button id="clearSearchBtn" class="btn btn-secondary" style="margin-top: 12px; padding: 6px 16px;">
+            Clear Search
+          </button>
         </div>
       `;
+      document.getElementById('clearSearchBtn')?.addEventListener('click', () => {
+        document.getElementById('historySearch').value = '';
+        renderHistory();
+      });
       return;
     }
 
+    // Build UI
     contentDiv.innerHTML = `
-      <div class="history-header">
-        <h2>Analysis History</h2>
-        <button id="clearAllBtn" class="btn btn-danger">
-          🗑️ Remove All
-        </button>
-      </div>
-      <div class="history-list" id="historyRecords">
-        ${records.map(item => `
+      <div class="history-list" id="historyRecordsList">
+        ${filteredRecords.map(item => `
           <div class="history-item" data-id="${item._id}" data-prediction="${item.prediction}">
             <div class="history-item-content">
               <div class="history-text">${escapeHtml(item.news)}</div>
@@ -117,8 +136,7 @@ async function renderHistory() {
       </div>
     `;
 
-    // Attach listeners (safe: content just replaced)
-    document.getElementById('clearAllBtn').onclick = clearAllHistory;
+    // Reattach event listeners
     document.querySelectorAll('.btn-remove').forEach(btn => {
       btn.onclick = (e) => {
         const id = e.target.dataset.id;
@@ -231,3 +249,84 @@ content += `
   }
 }
 
+
+
+// ===== Search Functionality =====
+document.addEventListener('DOMContentLoaded', () => {
+  const searchInput = document.getElementById('historySearch');
+  const clearBtn = document.getElementById('clearSearch');
+
+  if (!searchInput) return;
+
+  // Live search as you type (debounced)
+  let searchTimeout;
+  searchInput.addEventListener('input', (e) => {
+    clearTimeout(searchTimeout);
+    searchTimeout = setTimeout(() => {
+      renderHistory(e.target.value);
+    }, 300); // Wait 300ms after typing stops
+  });
+
+  // Clear search
+  clearBtn?.addEventListener('click', () => {
+    searchInput.value = '';
+    renderHistory();
+    searchInput.focus();
+  });
+
+  // Trigger initial load when navigating to history
+  document.querySelector('[data-page="history"]')?.addEventListener('click', () => {
+    renderHistory();
+    setTimeout(() => searchInput?.focus(), 100);
+  });
+});
+
+// Clear all history button
+document.getElementById('clearHistoryBtn')?.addEventListener('click', async () => {
+  if (!confirm("⚠️ Delete all history? This cannot be undone.")) return;
+  try {
+    const response = await fetch('http://localhost:8000/history', {
+      method: 'DELETE'
+    });
+    if (!response.ok) throw new Error('Failed to clear history');
+    renderHistory(); // Refresh the list
+    document.getElementById('historySearch').value = ''; // Optional: clear search too
+  } catch (error) {
+    alert('Failed to clear history.');
+    console.error(error);
+  }
+});
+
+// ===== Theme Toggle Logic =====
+document.addEventListener('DOMContentLoaded', () => {
+  const toggleBtn = document.getElementById('theme-toggle');
+  if (!toggleBtn) return;
+
+  // Check system preference and localStorage
+  const userPref = localStorage.getItem('theme');
+  const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+  const isDarkMode = userPref === 'dark' || (userPref !== 'light' && systemPrefersDark);
+
+  if (isDarkMode) {
+    document.body.classList.add('dark-theme');
+    toggleBtn.querySelector('.sun-icon').style.display = 'block';
+    toggleBtn.querySelector('.theme-toggle svg:not(.sun-icon)').style.display = 'none';
+  }
+
+  toggleBtn.addEventListener('click', () => {
+    const isDark = document.body.classList.toggle('dark-theme');
+    localStorage.setItem('theme', isDark ? 'dark' : 'light');
+
+    // Toggle icons
+    const moon = toggleBtn.querySelector('svg:not(.sun-icon)');
+    const sun = toggleBtn.querySelector('.sun-icon');
+    if (isDark) {
+      sun.style.display = 'block';
+      moon.style.display = 'none';
+    } else {
+      sun.style.display = 'none';
+      moon.style.display = 'block';
+    }
+  });
+});

@@ -743,3 +743,240 @@ body {
   z-index: 1;
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
 }
+
+/* search bar */
+/* ===== History Search Bar - Professional UI ===== */
+.search-section {
+  margin-bottom: 24px;
+}
+
+.search-box {
+  position: relative;
+  display: flex;
+  align-items: center;
+  background: var(--card-bg);
+  border: 2px solid var(--border);
+  border-radius: 12px;
+  padding: 8px 16px;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.search-box:focus-within {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(26, 115, 232, 0.15);
+}
+
+.search-icon {
+  width: 20px;
+  height: 20px;
+  color: var(--text-secondary);
+  margin-right: 10px;
+  flex-shrink: 0;
+}
+
+#historySearch {
+  flex: 1;
+  border: none;
+  background: transparent;
+  font-size: 1rem;
+  color: var(--text-primary);
+  outline: none;
+  padding: 8px 0;
+}
+
+#historySearch::placeholder {
+  color: var(--text-secondary);
+  opacity: 0.8;
+}
+
+#historySearch:-webkit-autofill,
+#historySearch:-webkit-autofill:hover,
+#historySearch:-webkit-autofill:focus {
+  -webkit-text-fill-color: var(--text-primary);
+  box-shadow: 0 0 0 30px var(--card-bg) inset;
+}
+
+.clear-btn {
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  font-size: 1.2rem;
+  cursor: pointer;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  padding: 0;
+  margin-left: 8px;
+  opacity: 0;
+  transition: opacity 0.2s, background 0.2s;
+}
+
+.clear-btn:hover {
+  background: #e2e8f0;
+  color: var(--text-primary);
+}
+
+#historySearch:not(:placeholder-shown) + .clear-btn {
+  opacity: 1;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .search-box {
+    padding: 6px 12px;
+  }
+  
+  #historySearch {
+    font-size: 0.95rem;
+  }
+}
+
+
+.history-empty {
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--text-secondary);
+  font-style: italic;
+}
+
+.btn-secondary {
+  background: #e2e8f0;
+  color: var(--text-primary);
+  border: 1px solid var(--border);
+}
+.btn-secondary:hover {
+  background: #cbd5e1;
+}
+
+.clear-history-btn {
+  background-color: #ff4d4d;
+  color: white;
+  border: none;
+  border-radius: 9px;
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  margin-left: 12px;
+  height: 50px;
+  align-self: center;
+}
+
+.clear-history-btn:hover {
+  background-color: #e60000;
+}
+
+/* Ensure search section lays out items horizontally */
+.search-section {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.search-box {
+  display: flex;
+  align-items: center;
+  position: relative;
+  flex: 1;
+  max-width: 900px;
+}
+
+
+/* ===== Dark Mode Toggle Button ===== */
+.theme-toggle {
+  background: none;
+  border: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--sidebar-text);
+  cursor: pointer;
+  transition: background-color 0.2s, color 0.2s;
+  padding: 0;
+}
+.theme-toggle:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+}
+
+/* ===== Dark Theme Variables ===== */
+body.dark-theme {
+  /* Override light mode with dark equivalents */
+  --light-bg: #0f172a; /* slate-900 */
+  --card-bg: #1e293b;  /* slate-800 */
+  --text-primary: #f1f5f9;
+  --text-secondary: #94a8ba;
+  --border: #334155;
+  --sidebar-bg: #0f172a;
+  --sidebar-text: #cbd5e1;
+  --sidebar-active: #334155;
+  --shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  --shadow-hover: 0 10px 25px rgba(0, 0, 0, 0.4);
+}
+
+/* Optional: slightly adjust input and button colors in dark mode */
+body.dark-theme #newsInput {
+  background-color: #1e293b;
+  border-color: #334155;
+  color: #f1f5f9;
+}
+body.dark-theme #newsInput::placeholder {
+  color: #64748b;
+}
+body.dark-theme .history-item {
+  background: #1e293b;
+  border-color: #334155;
+  color: #f1f5f9;
+}
+body.dark-theme .history-item[data-prediction="REAL"] {
+  background: rgba(52, 168, 83, 0.15);
+  color: #bbf7d0;
+}
+body.dark-theme .history-item[data-prediction="FAKE"] {
+  background: rgba(234, 67, 53, 0.15);
+  color: #fca5a5;
+}
+/* ===== Dark Mode - Analysis Page Overrides ===== */
+body.dark-theme #analysis-page .container {
+  background: var(--card-bg);
+  color: var(--text-primary);
+}
+body.dark-theme .analysis-header h1,
+body.dark-theme .analysis-header p {
+  background: none;
+  -webkit-background-clip: unset;
+  background-clip: unset;
+  color: var(--text-primary);
+}
+body.dark-theme .stat-card {
+  background: var(--card-bg);
+  border-color: var(--border);
+  color: var(--text-primary);
+}
+body.dark-theme .stat-number,
+body.dark-theme .stat-label,
+body.dark-theme .stat-pct {
+  color: var(--text-primary);
+}
+body.dark-theme .analysis-chart {
+  background: var(--card-bg);
+  border-color: var(--border);
+}
+body.dark-theme .chart-legend {
+  color: var(--text-secondary);
+}
+body.dark-theme .legend-dot.real {
+  background: #69d37a; /* lighter green for visibility on dark */
+}
+body.dark-theme .legend-dot.fake {
+  background: #f28b82; /* lighter red for visibility on dark */
+}
+
