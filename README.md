@@ -12,13 +12,13 @@ The system analyzes input news content (e.g., headlines or full text) and predic
 ## 🏗️ Architecture
 
 - AI/Machine Learning Microservice: Built with FastAPI (Python)
-  Hosts the trained model (or rule-based classifier)
-  Exposes REST endpoints for news verification
+  - Hosts the trained model (or rule-based classifier)
+  - Exposes REST endpoints for news verification
 - Main Backend Service: Built with Node.js
-  Manages user requests, data flow, and integration
-  Communicates with the FastAPI microservice
+  - Manages user requests, data flow, and integration
+  - Communicates with the FastAPI microservice
 - Database: MongoDB
-  Stores news entries, sources, prediction results, timestamps, and metadata
+  - Stores news entries, sources, prediction results, timestamps, and metadata
 
 
 
