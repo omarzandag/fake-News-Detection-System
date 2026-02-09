@@ -54,18 +54,18 @@ fake-News-Detection-System/
 
 ## Setup
 
-  - 1. Clone the repository
+- 1. Clone the repository
 
 ```bash
 git clone https://github.com/omarzandag/fake-News-Detection-System.git
 cd fake-News-Detection-System
 ```
 
-  - 2. Start MongoDB
+- 2. Start MongoDB
        
 Ensure MongoDB is running locally or update connection strings for Atlas.
 
-  - 3. Run the AI Service (FastAPI)
+- 3. Run the AI Service (FastAPI)
 
 ```bash
 cd ai-service
@@ -73,7 +73,7 @@ pip install -r requirements.txt
 uvicorn main:app --reload
 ```
 
-  - 4. Run the Node.js Backend
+- 4. Run the Node.js Backend
   
 ```bash
 cd ../backend
@@ -83,8 +83,8 @@ npm start
 
 - 5. Access the API
 
-- FastAPI docs: http://localhost:8000/docs
-- Backend (assumed): http://localhost:3000
+  - FastAPI docs: http://localhost:8000/docs
+  - Backend (assumed): http://localhost:3000
 
 ## 📄 License
 
