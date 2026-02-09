@@ -19,25 +19,85 @@ The system analyzes input news content (e.g., headlines or full text) and predic
   - Communicates with the FastAPI microservice
 - Database: MongoDB
   - Stores news entries, sources, prediction results, timestamps, and metadata
+ 
+```bash
+fake-News-Detection-System/
+├── ai-service/        → FastAPI microservice (fake news classifier)
+├── backend/           → Node.js application
+├── database/          → MongoDB connection & schema setup
+└── README.md
+```
 
+## ⚙️ Technologies Used
+- AI Service: Python, FastAPI, scikit-learn / transformers (if used)
+- Backend: Node.js, Express (assumed)
+- Database: MongoDB (with Mongoose or native driver)
+- Architecture: Microservices, RESTful APIs
+- Deployment Ready: Container-friendly (Docker support recommended)
+  
+## ✨ Features
 
+- Submit news text for authenticity verification
+- Real-time fake/real prediction via AI microservice
+- Persistent storage of analyzed news in MongoDB
+- Scalable microservice design
+- University-level implementation of AI + web integration
+  
+## 🚀 Getting Started
 
+### Prerequisites
 
+- Node.js & npm
+- Python 3.8+
+- MongoDB instance (local or cloud)
+- pip (for Python dependencies)
 
+## Setup
 
-
-
-
-
-
-
-
-
-
-
-
-
+  - 1. Clone the repository
 
 ```bash
-mvn spring-boot:run
+git clone https://github.com/omarzandag/fake-News-Detection-System.git
+cd fake-News-Detection-System
 ```
+
+  - 2. Start MongoDB
+       
+Ensure MongoDB is running locally or update connection strings for Atlas.
+
+  - 3. Run the AI Service (FastAPI)
+
+```bash
+cd ai-service
+pip install -r requirements.txt
+uvicorn main:app --reload
+```
+
+  - 4. Run the Node.js Backend
+  
+```bash
+cd ../backend
+npm install
+npm start
+```
+
+- 5. Access the API
+
+- FastAPI docs: http://localhost:8000/docs
+- Backend (assumed): http://localhost:3000
+
+## 📄 License
+
+This project was developed as a university task. Use for educational purposes only unless otherwise specified by the author.
+
+
+
+
+
+
+
+
+
+
+
+
